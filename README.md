@@ -25,6 +25,34 @@ The Sepolia test network is a critical environment for Ethereum developers to te
 
 - **redis (==4.0.0)**: Redis is an in-memory data structure store used as a message broker by Celery. In this application, Redis is responsible for handling the task queue for processing transactions asynchronously.
 
+## Environment Variables
+It is crucial to create a `.env` file at the root of the project. This file contains sensitive configuration details required for the application to function correctly. Below is an example of the `.env` file:
+
+PRIVATE_KEY=YOUR_PRIVATE_KEY
+FAUCET_ADDRESS=YOUR_FAUCET_ADDRESS
+SECRET_KEY=YOUR_SECRET_KEY
+
+# Explanation of Variables
+
+PRIVATE_KEY:
+- This is the private key of an Ethereum wallet that the faucet will use to send Sepolia ETH.
+- The wallet must have Sepolia ETH available. You can obtain test ETH from a Sepolia faucet.
+- ⚠️ Important: Keep this private key secure and never share it publicly or commit it to a repository.
+
+FAUCET_ADDRESS:
+- The public address of the Ethereum wallet associated with the faucet.
+- This is the address that will be used to send Sepolia ETH to users requesting funds.
+
+SECRET_KEY:
+- This is the Django **`SECRET_KEY`**, which is required for cryptographic operations, such as session management and password hashing.
+- Use a securely generated key for production environments to ensure the security of your Django application.
+
+# Security Notes
+- Never commit your `.env` file to the repository. Add it to your `.gitignore` file to prevent accidental exposure.
+- Ensure that the Ethereum wallet you use for the faucet has sufficient Sepolia ETH for testing.
+- Use tools like Vault or encrypted environment variable management solutions for enhanced security in production environments.
+
+
 ## Setup Instructions
 
 1. **Build and run the application using Docker**:
