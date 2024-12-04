@@ -28,9 +28,9 @@ The Sepolia test network is a critical environment for Ethereum developers to te
 ## Environment Variables
 It is crucial to create a `.env` file at the root of the project. This file contains sensitive configuration details required for the application to function correctly. Below is an example of the `.env` file:
 
-PRIVATE_KEY=YOUR_PRIVATE_KEY
-FAUCET_ADDRESS=YOUR_FAUCET_ADDRESS
-SECRET_KEY=YOUR_SECRET_KEY
+- PRIVATE_KEY=YOUR_PRIVATE_KEY
+- FAUCET_ADDRESS=YOUR_FAUCET_ADDRESS
+- SECRET_KEY=YOUR_SECRET_KEY
 
 **Explanation of Variables**
 
