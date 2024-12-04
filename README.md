@@ -32,8 +32,7 @@ PRIVATE_KEY=YOUR_PRIVATE_KEY
 FAUCET_ADDRESS=YOUR_FAUCET_ADDRESS
 SECRET_KEY=YOUR_SECRET_KEY
 
-# Explanation of Variables
-
+**Explanation of Variables**
 PRIVATE_KEY:
 - This is the private key of an Ethereum wallet that the faucet will use to send Sepolia ETH.
 - The wallet must have Sepolia ETH available. You can obtain test ETH from a Sepolia faucet.
@@ -47,7 +46,7 @@ SECRET_KEY:
 - This is the Django **`SECRET_KEY`**, which is required for cryptographic operations, such as session management and password hashing.
 - Use a securely generated key for production environments to ensure the security of your Django application.
 
-# Security Notes
+**Security Notes**
 - Never commit your `.env` file to the repository. Add it to your `.gitignore` file to prevent accidental exposure.
 - Ensure that the Ethereum wallet you use for the faucet has sufficient Sepolia ETH for testing.
 - Use tools like Vault or encrypted environment variable management solutions for enhanced security in production environments.
