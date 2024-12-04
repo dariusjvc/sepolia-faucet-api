@@ -33,6 +33,7 @@ FAUCET_ADDRESS=YOUR_FAUCET_ADDRESS
 SECRET_KEY=YOUR_SECRET_KEY
 
 **Explanation of Variables**
+
 PRIVATE_KEY:
 - This is the private key of an Ethereum wallet that the faucet will use to send Sepolia ETH.
 - The wallet must have Sepolia ETH available. You can obtain test ETH from a Sepolia faucet.
