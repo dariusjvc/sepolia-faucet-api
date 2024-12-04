@@ -213,5 +213,58 @@ The application requires the following environment variables to be set for prope
 
 - **CELERY_RESULT_BACKEND**: The backend URL for Celery to store the results of the executed tasks. In this case, it's also using Redis.
 
+## Improvements
+
+### Handling Pending Transactions
+
+Currently, the application does not handle transactions that remain in a "pending" state. To improve this, a new feature could be implemented to track these transactions and update their status once finalized. Below is a suggested approach:
+
+1. **Add a New State in the Transaction Model**:
+   - Extend the transaction model to include a new status, such as `PENDING`, in addition to the existing statuses (e.g., `SUCCESS`, `FAILED`).
+   - Example:
+     ```python
+     class Transaction(models.Model):
+         STATUS_CHOICES = [
+             ('PENDING', 'Pending'),
+             ('SUCCESS', 'Success'),
+             ('FAILED', 'Failed'),
+         ]
+         status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+         # Other fields like transaction ID, wallet address, etc.
+     ```
+
+2. **Periodic Status Check**:
+   - Implement a periodic task using **Celery** to query the blockchain for the status of transactions that are still marked as `PENDING`.
+   - If a transaction is confirmed on the blockchain, update its status to `SUCCESS`. If it fails, mark it as `FAILED`.
+   - Example periodic task:
+     ```python
+     from web3 import Web3
+
+     @app.task
+     def update_pending_transactions():
+         pending_transactions = Transaction.objects.filter(status='PENDING')
+         for transaction in pending_transactions:
+             # Query the blockchain for the transaction status
+             receipt = web3.eth.get_transaction_receipt(transaction.tx_id)
+             if receipt and receipt.status == 1:
+                 transaction.status = 'SUCCESS'
+             elif receipt and receipt.status == 0:
+                 transaction.status = 'FAILED'
+             transaction.save()
+     ```
+
+3. **Benefits**:
+   - Ensures that pending transactions are tracked until they are finalized.
+   - Provides users with accurate feedback on the status of their requests.
+
+4. **Implementation Note**:
+   - The frequency of the periodic task should be configured to avoid overloading the blockchain or the server. For instance, you can run the task every few minutes.
+
+5. **User Notification**:
+   - Optional: Add a feature to notify users when their transaction status changes from `PENDING` to either `SUCCESS` or `FAILED`, through email or other means.
+
+This improvement would enhance the reliability and user experience of the application by ensuring that all transactions are processed and their final statuses are accurately reported.
+
+
 ## Conclusion
 This application provides a simple faucet service for Sepolia ETH, demonstrating the use of Django REST Framework with Docker, Celery, and Redis for asynchronous task processing. It is a scalable solution designed to handle requests efficiently while ensuring system stability.
