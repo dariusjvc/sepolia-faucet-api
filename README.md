@@ -221,37 +221,10 @@ Currently, the application does not handle transactions that remain in a "pendin
 
 1. **Add a New State in the Transaction Model**:
    - Extend the transaction model to include a new status, such as `PENDING`, in addition to the existing statuses (e.g., `SUCCESS`, `FAILED`).
-   - Example:
-     ```python
-     class Transaction(models.Model):
-         STATUS_CHOICES = [
-             ('PENDING', 'Pending'),
-             ('SUCCESS', 'Success'),
-             ('FAILED', 'Failed'),
-         ]
-         status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
-         # Other fields like transaction ID, wallet address, etc.
-     ```
 
 2. **Periodic Status Check**:
    - Implement a periodic task using **Celery** to query the blockchain for the status of transactions that are still marked as `PENDING`.
    - If a transaction is confirmed on the blockchain, update its status to `SUCCESS`. If it fails, mark it as `FAILED`.
-   - Example periodic task:
-     ```python
-     from web3 import Web3
-
-     @app.task
-     def update_pending_transactions():
-         pending_transactions = Transaction.objects.filter(status='PENDING')
-         for transaction in pending_transactions:
-             # Query the blockchain for the transaction status
-             receipt = web3.eth.get_transaction_receipt(transaction.tx_id)
-             if receipt and receipt.status == 1:
-                 transaction.status = 'SUCCESS'
-             elif receipt and receipt.status == 0:
-                 transaction.status = 'FAILED'
-             transaction.save()
-     ```
 
 3. **Benefits**:
    - Ensures that pending transactions are tracked until they are finalized.
