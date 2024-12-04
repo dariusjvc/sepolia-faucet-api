@@ -1,0 +1,7 @@
+Django>=3.2,<4.0
+djangorestframework==3.14.0
+drf-yasg==1.21.5
+web3==5.29.1
+psycopg2-binary
+celery==5.4.0
+redis==4.0.0

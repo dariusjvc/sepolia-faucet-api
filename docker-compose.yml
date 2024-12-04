@@ -1,0 +1,35 @@
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=myproject.settings
+      - SECRET_KEY=${SECRET_KEY}
+      - REDIS_URL=redis://redis:6379/0
+      - PRIVATE_KEY=${PRIVATE_KEY}
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - DEBUG=True
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    entrypoint: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+  celery:
+    build: .
+    command: celery -A myproject worker --loglevel=info --concurrency=10
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+    environment:
+      - FAUCET_ADDRESS=${FAUCET_ADDRESS}   
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
