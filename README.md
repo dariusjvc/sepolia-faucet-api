@@ -25,7 +25,7 @@ The Sepolia test network is a critical environment for Ethereum developers to te
 
 - **redis (==4.0.0)**: Redis is an in-memory data structure store used as a message broker by Celery. In this application, Redis is responsible for handling the task queue for processing transactions asynchronously.
 
-## Environment Variables
+## .env file
 It is crucial to create a `.env` file at the root of the project. This file contains sensitive configuration details required for the application to function correctly. Below is an example of the `.env` file:
 
 - PRIVATE_KEY=YOUR_PRIVATE_KEY
